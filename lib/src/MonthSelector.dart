@@ -266,7 +266,11 @@ class YearSelector1State extends State<YearSelector1> {
       child: Text(
         DateFormat.y(locale).format(date),
         style: TextStyle(
-          color: date.year == widget.selectedDate!.year ? Colors.white : Color(0xff707070)
+          color: date.year == widget.selectedDate!.year
+              ? Colors.white
+              : date.year == DateTime.now().year
+                ? Colors.blueAccent
+                : Color(0xff707070)
         ),
       ),
     );
@@ -442,33 +446,26 @@ class HalfSelectorState extends State<HalfSelector> {
     final bool isEnabled = _isEnabled(date);
     List<dynamic> temp = makePeriod(date, type);
     String title = searchWhen(date, type);
-
+    String check = searchWhen(widget.selectedDate!, type);
+    String todayIs = searchWhen(DateTime.now(), type);
 
     return ElevatedButton(
       onPressed: isEnabled
           ? () => widget.onHalfSelected(DateTime(date.year, date.month))
           : null,
       style: ElevatedButton.styleFrom(
-        primary: date.month == widget.selectedDate!.month &&
-            date.year == widget.selectedDate!.year
-            ? Colors.blue
+        primary: check == title
+            ? Colors.blueAccent
             : Colors.white,
-        // textStyle: TextStyle(
-        //   color: date.month == widget.selectedDate!.month &&
-        //       date.year == widget.selectedDate!.year
-        //       ? Theme.of(context).accentTextTheme.button!.color
-        //       : date.month == DateTime.now().month &&
-        //       date.year == DateTime.now().year
-        //       ? Theme.of(context).accentColor
-        //       : null,
-        // ),
       ),
         child: Text(
           title,
           style: TextStyle(
-            color: date.month == widget.selectedDate!.month && date.year == widget.selectedDate!.year
+            color: check == title
                 ? Colors.white
-                : Color(0xff707070)
+                : todayIs == title
+                  ? Colors.blue
+                  : Color(0xff707070)
           ),
         ),
     );
@@ -818,33 +815,26 @@ class QuarterSelectorState extends State<QuarterSelector> {
     final bool isEnabled = _isEnabled(date);
     List<dynamic> temp = makePeriod(date, type);
     String title = searchWhen(date, type);
-
+    String check = searchWhen(widget.selectedDate!, type);
+    String todayIs = searchWhen(DateTime.now(), type);
 
     return ElevatedButton(
       onPressed: isEnabled
           ? () => widget.onQtrSelected(DateTime(date.year, date.month))
           : null,
       style: ElevatedButton.styleFrom(
-        primary: date.month == widget.selectedDate!.month &&
-            date.year == widget.selectedDate!.year
+        primary: check == title
             ? Colors.blueAccent
             : Colors.white,
-        // textStyle: TextStyle(
-        //   color: date.month == widget.selectedDate!.month &&
-        //       date.year == widget.selectedDate!.year
-        //       ? Theme.of(context).accentTextTheme.button!.color
-        //       : date.month == DateTime.now().month &&
-        //       date.year == DateTime.now().year
-        //       ? Theme.of(context).accentColor
-        //       : null,
-        // ),
       ),
       child: Text(
         title,
         style: TextStyle(
-            color: date.month == widget.selectedDate!.month && date.year == widget.selectedDate!.year
+            color: check == title
               ? Colors.white
-              : Color(0xff707070)
+              : todayIs == title
+                ? Colors.blue
+                : Color(0xff707070)
         ),
       ),
     );
