@@ -261,16 +261,13 @@ class YearSelector1State extends State<YearSelector1> {
       style: ElevatedButton.styleFrom(
         primary: date.year == widget.selectedDate!.year
             ? Colors.blueAccent
-            : null,
-        textStyle: TextStyle(
-          color: date.year == widget.selectedDate!.year
-              ? Colors.white
-              : date.year == DateTime.now().year
-                ? Colors.white
-                : null,),
+            : Colors.white,
       ),
       child: Text(
         DateFormat.y(locale).format(date),
+        style: TextStyle(
+          color: date.year == widget.selectedDate!.year ? Colors.white : Color(0xff707070)
+        ),
       ),
     );
   }
@@ -454,9 +451,8 @@ class HalfSelectorState extends State<HalfSelector> {
       style: ElevatedButton.styleFrom(
         primary: date.month == widget.selectedDate!.month &&
             date.year == widget.selectedDate!.year
-            ? Colors.blueAccent
-            : null,
-        textStyle: TextStyle(color: Colors.white),
+            ? Colors.blue
+            : Colors.white,
         // textStyle: TextStyle(
         //   color: date.month == widget.selectedDate!.month &&
         //       date.year == widget.selectedDate!.year
@@ -467,7 +463,14 @@ class HalfSelectorState extends State<HalfSelector> {
         //       : null,
         // ),
       ),
-        child: Text(title),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: date.month == widget.selectedDate!.month && date.year == widget.selectedDate!.year
+                ? Colors.white
+                : Color(0xff707070)
+          ),
+        ),
     );
   }
 
@@ -825,8 +828,7 @@ class QuarterSelectorState extends State<QuarterSelector> {
         primary: date.month == widget.selectedDate!.month &&
             date.year == widget.selectedDate!.year
             ? Colors.blueAccent
-            : null,
-        textStyle: TextStyle(color: Colors.white),
+            : Colors.white,
         // textStyle: TextStyle(
         //   color: date.month == widget.selectedDate!.month &&
         //       date.year == widget.selectedDate!.year
@@ -837,7 +839,14 @@ class QuarterSelectorState extends State<QuarterSelector> {
         //       : null,
         // ),
       ),
-      child: Text(title),
+      child: Text(
+        title,
+        style: TextStyle(
+            color: date.month == widget.selectedDate!.month && date.year == widget.selectedDate!.year
+              ? Colors.white
+              : Color(0xff707070)
+        ),
+      ),
     );
   }
 
