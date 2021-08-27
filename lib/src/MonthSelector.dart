@@ -992,50 +992,50 @@ class QuarterSelectorState extends State<QuarterSelector> {
         var twoyAgoL4 = DateTime(twoyAgoF2.year, twoyAgoF4.month + typeNumb, 1)
             .subtract(Duration(days: 1));
 
-        tempList[0] = [first1.toString(), last1.toString(), '$temp 1분기'];
-        tempList[1] = [first2.toString(), last2.toString(), '$temp 2분기'];
-        tempList[2] = [first3.toString(), last3.toString(), '$temp 3분기'];
-        tempList[3] = [first4.toString(), last4.toString(), '$temp 4분기'];
+        tempList[0] = [first1.toString(), last1.toString(), '$temp-1'];
+        tempList[1] = [first2.toString(), last2.toString(), '$temp-2'];
+        tempList[2] = [first3.toString(), last3.toString(), '$temp-3'];
+        tempList[3] = [first4.toString(), last4.toString(), '$temp-4'];
 
         tempList[4] = [
           aYearAgoF1.toString(),
           aYearAgoL1.toString(),
-          '$aYearAgo 1분기'
+          '$aYearAgo-1'
         ];
         tempList[5] = [
           aYearAgoF2.toString(),
           aYearAgoL2.toString(),
-          '$aYearAgo 2분기'
+          '$aYearAgo-2'
         ];
         tempList[6] = [
           aYearAgoF3.toString(),
           aYearAgoL3.toString(),
-          '$aYearAgo 3분기'
+          '$aYearAgo-3'
         ];
         tempList[7] = [
           aYearAgoF4.toString(),
           aYearAgoL4.toString(),
-          '$aYearAgo 4분기'
+          '$aYearAgo-4'
         ];
         tempList[8] = [
           twoyAgoF1.toString(),
           twoyAgoL1.toString(),
-          '$twoYearsAgo 1분기'
+          '$twoYearsAgo-1'
         ];
         tempList[9] = [
           twoyAgoF2.toString(),
           twoyAgoL2.toString(),
-          '$twoYearsAgo 2분기'
+          '$twoYearsAgo-2'
         ];
         tempList[10] = [
           twoyAgoF3.toString(),
           twoyAgoL3.toString(),
-          '$twoYearsAgo 3분기'
+          '$twoYearsAgo-3'
         ];
         tempList[11] = [
           twoyAgoF4.toString(),
           twoyAgoL4.toString(),
-          '$twoYearsAgo 4분기'
+          '$twoYearsAgo-4'
         ];
 
         resultList = tempList;
