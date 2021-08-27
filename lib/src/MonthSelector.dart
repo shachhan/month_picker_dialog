@@ -798,23 +798,24 @@ class QuarterSelectorState extends State<QuarterSelector> {
       padding: EdgeInsets.all(8.0),
       crossAxisCount: 4,
       childAspectRatio: 1.5,
-      mainAxisSpacing: 2.0,
+      mainAxisSpacing: 10.0,
       crossAxisSpacing: 2.0,
       children: List<Widget>.generate(
           temp.length,
               (final int index) {
             var period = DateTime.parse(temp[index][0]);
 
-            return _getHalfBtn(period, getLocale(context, selectedLocale: widget.locale));
+            return _getQtrBtn(period, getLocale(context, selectedLocale: widget.locale));
           }),
     );
   }
 
   // for HalfBtn
-  Widget _getHalfBtn(final DateTime date, final String locale) {
+  Widget _getQtrBtn(final DateTime date, final String locale) {
     final bool isEnabled = _isEnabled(date);
     List<dynamic> temp = makePeriod(date, type);
     String title = searchWhen(date, type);
+    String result = title.substring(0, 6);
     String check = searchWhen(widget.selectedDate!, type);
     String todayIs = searchWhen(DateTime.now(), type);
 
@@ -828,13 +829,14 @@ class QuarterSelectorState extends State<QuarterSelector> {
             : Colors.white,
       ),
       child: Text(
-        title,
+        result,
         style: TextStyle(
             color: check == title
               ? Colors.white
               : todayIs == title
                 ? Colors.blue
-                : Color(0xff707070)
+                : Color(0xff707070),
+            fontSize: 11
         ),
       ),
     );
