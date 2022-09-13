@@ -65,21 +65,23 @@ class MonthSelectorState extends State<MonthSelector> {
 
   Widget _getMonthButton(final DateTime date, final String locale) {
     final bool isEnabled = _isEnabled(date);
-    return FlatButton(
+    return TextButton(
       onPressed: isEnabled
           ? () => widget.onMonthSelected(DateTime(date.year, date.month))
           : null,
-      color: date.month == widget.selectedDate!.month &&
-              date.year == widget.selectedDate!.year
-          ? Theme.of(context).accentColor
-          : null,
-      textColor: date.month == widget.selectedDate!.month &&
-              date.year == widget.selectedDate!.year
-          ? Theme.of(context).accentTextTheme.button!.color
-          : date.month == DateTime.now().month &&
-                  date.year == DateTime.now().year
-              ? Theme.of(context).accentColor
-              : null,
+      style: TextButton.styleFrom(
+        backgroundColor: date.month == widget.selectedDate!.month &&
+                date.year == widget.selectedDate!.year
+            ? Theme.of(context).colorScheme.secondary
+            : null,
+        foregroundColor: date.month == widget.selectedDate!.month &&
+                date.year == widget.selectedDate!.year
+            ? Theme.of(context).colorScheme.primary
+            : date.month == DateTime.now().month &&
+                    date.year == DateTime.now().year
+                ? Theme.of(context).colorScheme.secondary
+                : null,
+      ),
       child: Text(
         DateFormat.MMM(locale).format(date),
       ),
@@ -221,57 +223,54 @@ class YearSelector1State extends State<YearSelector1> {
 
   Widget _yearGridBuilder(final BuildContext context, final int page) =>
       ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.all(8.0),
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return _getYearButton(
-            DateTime(
-              widget.selectedDate != null
-                  ? widget.selectedDate!.year == 2021
-                    ? widget.selectedDate!.year - index
-                    : DateTime.now().year - index
-                  : 0,
-              index + 1),
-            getLocale(context, selectedLocale: widget.locale));
-        }
-      );
-      // GridView.count(
-      //   physics: const NeverScrollableScrollPhysics(),
-      //   padding: EdgeInsets.all(8.0),
-      //   crossAxisCount: 4,
-      //   children: List<Widget>.generate(
-      //     12,
-      //     (final int index) => _getYearButton(
-      //         DateTime(
-      //             widget.firstDate != null
-      //                 ? widget.firstDate!.year + page
-      //                 : page,
-      //             index + 1),
-      //         getLocale(context, selectedLocale: widget.locale)),
-      //   ).toList(growable: false),
-      // );
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.all(8.0),
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return _getYearButton(
+                DateTime(
+                    widget.selectedDate != null
+                        ? widget.selectedDate!.year == 2021
+                            ? widget.selectedDate!.year - index
+                            : DateTime.now().year - index
+                        : 0,
+                    index + 1),
+                getLocale(context, selectedLocale: widget.locale));
+          });
+  // GridView.count(
+  //   physics: const NeverScrollableScrollPhysics(),
+  //   padding: EdgeInsets.all(8.0),
+  //   crossAxisCount: 4,
+  //   children: List<Widget>.generate(
+  //     12,
+  //     (final int index) => _getYearButton(
+  //         DateTime(
+  //             widget.firstDate != null
+  //                 ? widget.firstDate!.year + page
+  //                 : page,
+  //             index + 1),
+  //         getLocale(context, selectedLocale: widget.locale)),
+  //   ).toList(growable: false),
+  // );
 
   Widget _getYearButton(final DateTime date, final String locale) {
     final bool isEnabled = _isEnabled(date);
     return ElevatedButton(
-      onPressed: isEnabled
-          ? () => widget.onYearSelected(DateTime(date.year))
-          : null,
+      onPressed:
+          isEnabled ? () => widget.onYearSelected(DateTime(date.year)) : null,
       style: ElevatedButton.styleFrom(
-        primary: date.year == widget.selectedDate!.year
+        backgroundColor: date.year == widget.selectedDate!.year
             ? Colors.blueAccent
             : Colors.white,
       ),
       child: Text(
         DateFormat.y(locale).format(date),
         style: TextStyle(
-          color: date.year == widget.selectedDate!.year
-              ? Colors.white
-              : date.year == DateTime.now().year
-                ? Colors.blueAccent
-                : Color(0xff707070)
-        ),
+            color: date.year == widget.selectedDate!.year
+                ? Colors.white
+                : date.year == DateTime.now().year
+                    ? Colors.blueAccent
+                    : Color(0xff707070)),
       ),
     );
   }
@@ -373,7 +372,7 @@ class HalfSelector extends StatefulWidget {
   final DateTime? openDate, selectedDate, firstDate, lastDate;
   final PublishSubject<UpDownPageLimit> upDownPageLimitPublishSubject;
   final PublishSubject<UpDownButtonEnableState>
-  upDownButtonEnableStatePublishSubject;
+      upDownButtonEnableStatePublishSubject;
   final Locale? locale;
   const HalfSelector({
     Key? key,
@@ -404,7 +403,7 @@ class HalfSelectorState extends State<HalfSelector> {
   Widget build(BuildContext context) => _halfGridBuilder(context);
 
   Widget _halfListBuilder(final BuildContext context) {
-    var today =DateTime.now();
+    var today = DateTime.now();
     List<dynamic> temp = makePeriod(today, type);
 
     return ListView.builder(
@@ -415,13 +414,13 @@ class HalfSelectorState extends State<HalfSelector> {
         var period = DateTime.parse(temp[index][0]);
 
         return _getHalfBtn(
-          period, getLocale(context, selectedLocale: widget.locale));
+            period, getLocale(context, selectedLocale: widget.locale));
       },
     );
   }
 
   Widget _halfGridBuilder(final BuildContext context) {
-    var today =DateTime.now();
+    var today = DateTime.now();
     List<dynamic> temp = makePeriod(today, type);
 
     return GridView.count(
@@ -431,13 +430,12 @@ class HalfSelectorState extends State<HalfSelector> {
       childAspectRatio: 3,
       mainAxisSpacing: 2.0,
       crossAxisSpacing: 2.0,
-      children: List<Widget>.generate(
-        temp.length,
-        (final int index) {
-          var period = DateTime.parse(temp[index][0]);
+      children: List<Widget>.generate(temp.length, (final int index) {
+        var period = DateTime.parse(temp[index][0]);
 
-          return _getHalfBtn(period, getLocale(context, selectedLocale: widget.locale));
-        }),
+        return _getHalfBtn(
+            period, getLocale(context, selectedLocale: widget.locale));
+      }),
     );
   }
 
@@ -454,20 +452,17 @@ class HalfSelectorState extends State<HalfSelector> {
           ? () => widget.onHalfSelected(DateTime(date.year, date.month))
           : null,
       style: ElevatedButton.styleFrom(
-        primary: check == title
-            ? Colors.blueAccent
-            : Colors.white,
+        primary: check == title ? Colors.blueAccent : Colors.white,
       ),
-        child: Text(
-          title,
-          style: TextStyle(
+      child: Text(
+        title,
+        style: TextStyle(
             color: check == title
                 ? Colors.white
                 : todayIs == title
-                  ? Colors.blue
-                  : Color(0xff707070)
-          ),
-        ),
+                    ? Colors.blue
+                    : Color(0xff707070)),
+      ),
     );
   }
 
@@ -598,17 +593,18 @@ class HalfSelectorState extends State<HalfSelector> {
         // A Year ago
         var aYearAgoF1 = DateTime(first1.year - 1, first1.month, first1.day);
         var aYearAgoF2 =
-        DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
         var aYearAgoF3 =
-        DateTime(aYearAgoF1.year, aYearAgoF2.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF2.month + typeNumb, 1);
         var aYearAgoF4 =
-        DateTime(aYearAgoF1.year, aYearAgoF3.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF3.month + typeNumb, 1);
 
         var aYearAgoL1 = aYearAgoF2.subtract(Duration(days: 1));
         var aYearAgoL2 = aYearAgoF3.subtract(Duration(days: 1));
         var aYearAgoL3 = aYearAgoF4.subtract(Duration(days: 1));
-        var aYearAgoL4 = DateTime(aYearAgoF2.year, aYearAgoF4.month + typeNumb, 1)
-            .subtract(Duration(days: 1));
+        var aYearAgoL4 =
+            DateTime(aYearAgoF2.year, aYearAgoF4.month + typeNumb, 1)
+                .subtract(Duration(days: 1));
 
         // Two Years ago
         var twoyAgoF1 = DateTime(first1.year - 2, first1.month, first1.day);
@@ -687,10 +683,11 @@ class HalfSelectorState extends State<HalfSelector> {
         // A Year ago
         var aYearAgoF1 = DateTime(first1.year - 1, first1.month, first1.day);
         var aYearAgoF2 =
-        DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
         var aYearAgoL1 = aYearAgoF2.subtract(Duration(days: 1));
-        var aYearAgoL2 = DateTime(aYearAgoF2.year, aYearAgoF2.month + typeNumb, 1)
-            .subtract(Duration(days: 1));
+        var aYearAgoL2 =
+            DateTime(aYearAgoF2.year, aYearAgoF2.month + typeNumb, 1)
+                .subtract(Duration(days: 1));
 
         // Two Years ago
         var twoyAgoF1 = DateTime(first1.year - 2, first1.month, first1.day);
@@ -759,7 +756,7 @@ class QuarterSelector extends StatefulWidget {
   final DateTime? openDate, selectedDate, firstDate, lastDate;
   final PublishSubject<UpDownPageLimit> upDownPageLimitPublishSubject;
   final PublishSubject<UpDownButtonEnableState>
-  upDownButtonEnableStatePublishSubject;
+      upDownButtonEnableStatePublishSubject;
   final Locale? locale;
   const QuarterSelector({
     Key? key,
@@ -800,13 +797,12 @@ class QuarterSelectorState extends State<QuarterSelector> {
       childAspectRatio: 1.5,
       mainAxisSpacing: 10.0,
       crossAxisSpacing: 2.0,
-      children: List<Widget>.generate(
-          temp.length,
-              (final int index) {
-            var period = DateTime.parse(temp[index][0]);
+      children: List<Widget>.generate(temp.length, (final int index) {
+        var period = DateTime.parse(temp[index][0]);
 
-            return _getQtrBtn(period, getLocale(context, selectedLocale: widget.locale));
-          }),
+        return _getQtrBtn(
+            period, getLocale(context, selectedLocale: widget.locale));
+      }),
     );
   }
 
@@ -824,20 +820,17 @@ class QuarterSelectorState extends State<QuarterSelector> {
           ? () => widget.onQtrSelected(DateTime(date.year, date.month))
           : null,
       style: ElevatedButton.styleFrom(
-        primary: check == title
-            ? Colors.blueAccent
-            : Colors.white,
+        primary: check == title ? Colors.blueAccent : Colors.white,
       ),
       child: Text(
         result,
         style: TextStyle(
             color: check == title
-              ? Colors.white
-              : todayIs == title
-                ? Colors.blue
-                : Color(0xff707070),
-            fontSize: 11
-        ),
+                ? Colors.white
+                : todayIs == title
+                    ? Colors.blue
+                    : Color(0xff707070),
+            fontSize: 11),
       ),
     );
   }
@@ -969,17 +962,18 @@ class QuarterSelectorState extends State<QuarterSelector> {
         // A Year ago
         var aYearAgoF1 = DateTime(first1.year - 1, first1.month, first1.day);
         var aYearAgoF2 =
-        DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
         var aYearAgoF3 =
-        DateTime(aYearAgoF1.year, aYearAgoF2.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF2.month + typeNumb, 1);
         var aYearAgoF4 =
-        DateTime(aYearAgoF1.year, aYearAgoF3.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF3.month + typeNumb, 1);
 
         var aYearAgoL1 = aYearAgoF2.subtract(Duration(days: 1));
         var aYearAgoL2 = aYearAgoF3.subtract(Duration(days: 1));
         var aYearAgoL3 = aYearAgoF4.subtract(Duration(days: 1));
-        var aYearAgoL4 = DateTime(aYearAgoF2.year, aYearAgoF4.month + typeNumb, 1)
-            .subtract(Duration(days: 1));
+        var aYearAgoL4 =
+            DateTime(aYearAgoF2.year, aYearAgoF4.month + typeNumb, 1)
+                .subtract(Duration(days: 1));
 
         // Two Years ago
         var twoyAgoF1 = DateTime(first1.year - 2, first1.month, first1.day);
@@ -1058,10 +1052,11 @@ class QuarterSelectorState extends State<QuarterSelector> {
         // A Year ago
         var aYearAgoF1 = DateTime(first1.year - 1, first1.month, first1.day);
         var aYearAgoF2 =
-        DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
+            DateTime(aYearAgoF1.year, aYearAgoF1.month + typeNumb, 1);
         var aYearAgoL1 = aYearAgoF2.subtract(Duration(days: 1));
-        var aYearAgoL2 = DateTime(aYearAgoF2.year, aYearAgoF2.month + typeNumb, 1)
-            .subtract(Duration(days: 1));
+        var aYearAgoL2 =
+            DateTime(aYearAgoF2.year, aYearAgoF2.month + typeNumb, 1)
+                .subtract(Duration(days: 1));
 
         // Two Years ago
         var twoyAgoF1 = DateTime(first1.year - 2, first1.month, first1.day);
@@ -1121,5 +1116,167 @@ class QuarterSelectorState extends State<QuarterSelector> {
     }
 
     return title;
+  }
+}
+
+class WeekSelector extends StatefulWidget {
+  final ValueChanged<DateTime> onWeekSelected;
+  final DateTime? openDate, selectedDate, firstDate, lastDate;
+  final PublishSubject<UpDownPageLimit> upDownPageLimitPublishSubject;
+  final PublishSubject<UpDownButtonEnableState>
+      upDownButtonEnableStatePublishSubject;
+  final Locale? locale;
+
+  const WeekSelector({
+    Key? key,
+    required DateTime this.openDate,
+    required DateTime this.selectedDate,
+    required this.onWeekSelected,
+    required this.upDownPageLimitPublishSubject,
+    required this.upDownButtonEnableStatePublishSubject,
+    this.firstDate,
+    this.lastDate,
+    this.locale,
+  })  : assert(openDate != null),
+        assert(selectedDate != null),
+        assert(onWeekSelected != null),
+        assert(upDownPageLimitPublishSubject != null),
+        assert(upDownButtonEnableStatePublishSubject != null),
+        super(key: key);
+
+  @override
+  WeekSelectorState createState() => WeekSelectorState();
+}
+
+class WeekSelectorState extends State<WeekSelector> {
+  PageController? _pageController;
+
+  @override
+  Widget build(BuildContext context) => PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.vertical,
+        physics: const AlwaysScrollableScrollPhysics(),
+        onPageChanged: _onPageChange,
+        itemCount: _getPageCount(),
+        itemBuilder: _yearGridBuilder,
+      );
+
+  Widget _yearGridBuilder(final BuildContext context, final int page) =>
+      Dialog();
+
+  Widget _getMonthButton(final DateTime date, final String locale) {
+    final bool isEnabled = _isEnabled(date);
+    return TextButton(
+      onPressed: isEnabled
+          ? () => widget.onWeekSelected(DateTime(date.year, date.month))
+          : null,
+      style: TextButton.styleFrom(
+        backgroundColor: date.month == widget.selectedDate!.month &&
+                date.year == widget.selectedDate!.year
+            ? Theme.of(context).accentColor
+            : null,
+      ),
+      child: Text(
+        DateFormat.MMM(locale).format(date),
+        style: TextStyle(
+          color: date.month == widget.selectedDate!.month &&
+                  date.year == widget.selectedDate!.year
+              ? Theme.of(context).accentTextTheme.button!.color
+              : date.month == DateTime.now().month &&
+                      date.year == DateTime.now().year
+                  ? Theme.of(context).accentColor
+                  : null,
+        ),
+      ),
+    );
+  }
+
+  void _onPageChange(final int page) {
+    widget.upDownPageLimitPublishSubject.add(
+      new UpDownPageLimit(
+          widget.firstDate != null ? widget.firstDate!.year + page : page, 0),
+    );
+    widget.upDownButtonEnableStatePublishSubject.add(
+      new UpDownButtonEnableState(page > 0, page < _getPageCount() - 1),
+    );
+  }
+
+  int _getPageCount() {
+    if (widget.firstDate != null && widget.lastDate != null) {
+      return widget.lastDate!.year - widget.firstDate!.year + 1;
+    } else if (widget.firstDate != null && widget.lastDate == null) {
+      return 9999 - widget.firstDate!.year;
+    } else if (widget.firstDate == null && widget.lastDate != null) {
+      return widget.lastDate!.year + 1;
+    } else
+      return 9999;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _pageController = new PageController(
+        initialPage: widget.firstDate == null
+            ? widget.openDate!.year
+            : widget.openDate!.year - widget.firstDate!.year);
+    super.initState();
+    new Future.delayed(Duration.zero, () {
+      widget.upDownPageLimitPublishSubject.add(
+        new UpDownPageLimit(
+          widget.firstDate == null
+              ? _pageController!.page!.toInt()
+              : widget.firstDate!.year + _pageController!.page!.toInt(),
+          0,
+        ),
+      );
+      widget.upDownButtonEnableStatePublishSubject.add(
+        new UpDownButtonEnableState(
+          _pageController!.page!.toInt() > 0,
+          _pageController!.page!.toInt() < _getPageCount() - 1,
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController!.dispose();
+    super.dispose();
+  }
+
+  bool _isEnabled(final DateTime date) {
+    if (widget.firstDate == null && widget.lastDate == null)
+      return true;
+    else if (widget.firstDate != null &&
+        widget.lastDate != null &&
+        widget.firstDate!.compareTo(date) <= 0 &&
+        widget.lastDate!.compareTo(date) >= 0)
+      return true;
+    else if (widget.firstDate != null &&
+        widget.lastDate == null &&
+        widget.firstDate!.compareTo(date) <= 0)
+      return true;
+    else if (widget.firstDate == null &&
+        widget.lastDate != null &&
+        widget.lastDate!.compareTo(date) >= 0)
+      return true;
+    else
+      return false;
+  }
+
+  void goDown() {
+    _pageController!.animateToPage(
+      _pageController!.page!.toInt() + 1,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void goUp() {
+    _pageController!.animateToPage(
+      _pageController!.page!.toInt() - 1,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
   }
 }

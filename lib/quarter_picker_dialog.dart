@@ -62,7 +62,7 @@ class _QuarterPickerDialogState extends State<_QuarterPickerDialog> {
 
   PublishSubject<UpDownPageLimit>? _upDownPageLimitPublishSubject;
   PublishSubject<UpDownButtonEnableState>?
-  _upDownButtonEnableStatePublishSubject;
+      _upDownButtonEnableStatePublishSubject;
 
   Widget? _selector;
   DateTime? selectedDate, _firstDate, _lastDate;
@@ -70,7 +70,8 @@ class _QuarterPickerDialogState extends State<_QuarterPickerDialog> {
   @override
   void initState() {
     super.initState();
-    selectedDate = DateTime(widget.initialDate!.year, widget.initialDate!.month);
+    selectedDate =
+        DateTime(widget.initialDate!.year, widget.initialDate!.month);
     if (widget.firstDate != null)
       _firstDate = DateTime(widget.firstDate!.year, widget.firstDate!.month);
     if (widget.lastDate != null)
@@ -85,7 +86,7 @@ class _QuarterPickerDialogState extends State<_QuarterPickerDialog> {
       selectedDate: selectedDate!,
       upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
       upDownButtonEnableStatePublishSubject:
-      _upDownButtonEnableStatePublishSubject!,
+          _upDownButtonEnableStatePublishSubject!,
       firstDate: _firstDate,
       lastDate: _lastDate,
       onQtrSelected: _onQtrSelected,
@@ -114,7 +115,7 @@ class _QuarterPickerDialogState extends State<_QuarterPickerDialog> {
     );
     return Theme(
       data:
-      Theme.of(context).copyWith(dialogBackgroundColor: Colors.transparent),
+          Theme.of(context).copyWith(dialogBackgroundColor: Colors.transparent),
       child: Dialog(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -141,15 +142,15 @@ class _QuarterPickerDialogState extends State<_QuarterPickerDialog> {
   }
 
   Widget buildButtonBar(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     return ButtonBar(
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, null),
           child: Text(widget.localizations.cancelButtonLabel),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, selectedDate),
           child: Text(widget.localizations.okButtonLabel),
         )
@@ -281,20 +282,20 @@ class _QuarterPickerDialogState extends State<_QuarterPickerDialog> {
   // ));
 
   void _onQtrSelected(final DateTime date) => setState(() {
-    selectedDate = date;
-    _selector = new QuarterSelector(
-      key: _qtrSelectorState,
-      openDate: selectedDate!,
-      selectedDate: selectedDate!,
-      upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
-      upDownButtonEnableStatePublishSubject:
-      _upDownButtonEnableStatePublishSubject!,
-      firstDate: _firstDate,
-      lastDate: _lastDate,
-      onQtrSelected: _onQtrSelected,
-      locale: widget.locale,
-    );
-  });
+        selectedDate = date;
+        _selector = new QuarterSelector(
+          key: _qtrSelectorState,
+          openDate: selectedDate!,
+          selectedDate: selectedDate!,
+          upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
+          upDownButtonEnableStatePublishSubject:
+              _upDownButtonEnableStatePublishSubject!,
+          firstDate: _firstDate,
+          lastDate: _lastDate,
+          onQtrSelected: _onQtrSelected,
+          locale: widget.locale,
+        );
+      });
 
   void _onUpButtonPressed() {
     if (_qtrSelectorState.currentState != null) {

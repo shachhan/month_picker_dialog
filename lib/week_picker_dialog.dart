@@ -6,14 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/src/MonthSelector.dart';
 import 'package:month_picker_dialog/src/YearSelector.dart';
 import 'package:month_picker_dialog/src/common.dart';
+import 'package:month_picker_dialog/src/date_period.dart';
 import 'package:month_picker_dialog/src/locale_utils.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// Displays month picker dialog.
+/// Displays week picker dialog.
 /// [initialDate] is the initially selected month.
 /// [firstDate] is the optional lower bound for month selection.
 /// [lastDate] is the optional upper bound for month selection.
-Future<DateTime?> showHalfPicker({
+Future<DateTime?> showWeekPicker({
   required BuildContext context,
   required DateTime initialDate,
   DateTime? firstDate,
@@ -28,7 +29,7 @@ Future<DateTime?> showHalfPicker({
   assert(localizations != null);
   return await showDialog<DateTime>(
     context: context,
-    builder: (context) => _HalfPickerDialog(
+    builder: (context) => _WeekPickerDialog(
       initialDate: initialDate,
       firstDate: firstDate,
       lastDate: lastDate,
@@ -38,12 +39,12 @@ Future<DateTime?> showHalfPicker({
   );
 }
 
-class _HalfPickerDialog extends StatefulWidget {
+class _WeekPickerDialog extends StatefulWidget {
   final DateTime? initialDate, firstDate, lastDate;
   final MaterialLocalizations localizations;
-  final Locale? locale;
+  final locale;
 
-  const _HalfPickerDialog({
+  const _WeekPickerDialog({
     Key? key,
     required this.initialDate,
     required this.localizations,
@@ -53,12 +54,11 @@ class _HalfPickerDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HalfPickerDialogState createState() => _HalfPickerDialogState();
+  _WeekPickerDialogState createState() => _WeekPickerDialogState();
 }
 
-class _HalfPickerDialogState extends State<_HalfPickerDialog> {
-  final GlobalKey<YearSelectorState> _halfSelectorState = new GlobalKey();
-  final GlobalKey<MonthSelectorState> _monthSelectorState = new GlobalKey();
+class _WeekPickerDialogState extends State<_WeekPickerDialog> {
+  final GlobalKey<YearSelectorState> _weekSelectorState = new GlobalKey();
 
   PublishSubject<UpDownPageLimit>? _upDownPageLimitPublishSubject;
   PublishSubject<UpDownButtonEnableState>?
@@ -67,8 +67,11 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
   Widget? _selector;
   DateTime? selectedDate, _firstDate, _lastDate;
 
+  int firstDayOfWeekIndex = 0;
+
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     selectedDate =
         DateTime(widget.initialDate!.year, widget.initialDate!.month);
@@ -80,8 +83,8 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
     _upDownPageLimitPublishSubject = new PublishSubject();
     _upDownButtonEnableStatePublishSubject = new PublishSubject();
 
-    _selector = new HalfSelector(
-      key: _halfSelectorState,
+    _selector = new WeekSelector(
+      key: _weekSelectorState,
       openDate: selectedDate!,
       selectedDate: selectedDate!,
       upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
@@ -89,12 +92,14 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
           _upDownButtonEnableStatePublishSubject!,
       firstDate: _firstDate,
       lastDate: _lastDate,
-      onHalfSelected: _onHalfSelected,
+      onWeekSelected: _onWeekSelected,
       locale: widget.locale,
     );
   }
 
+  @override
   void dispose() {
+    // TODO: implement dispose
     _upDownPageLimitPublishSubject!.close();
     _upDownButtonEnableStatePublishSubject!.close();
     super.dispose();
@@ -113,6 +118,7 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
       ),
       color: theme.dialogBackgroundColor,
     );
+
     return Theme(
       data:
           Theme.of(context).copyWith(dialogBackgroundColor: Colors.transparent),
@@ -120,21 +126,23 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Builder(builder: (context) {
-              if (MediaQuery.of(context).orientation == Orientation.portrait) {
-                return IntrinsicWidth(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [header, content]),
-                );
-              }
-              return IntrinsicHeight(
-                child: Row(
+            Builder(
+              builder: (context) {
+                if (MediaQuery.of(context).orientation ==
+                    Orientation.portrait) {
+                  return IntrinsicWidth(
+                    child: Column(children: [header, content]),
+                  );
+                }
+                return IntrinsicHeight(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [header, content]),
-              );
-            }),
+                    children: [header, content],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -153,7 +161,7 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
         TextButton(
           onPressed: () => Navigator.pop(context, selectedDate),
           child: Text(widget.localizations.okButtonLabel),
-        )
+        ),
       ],
     );
   }
@@ -167,11 +175,9 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Center(
-              child: Text(
-                '${DateFormat.yMMM(locale).format(selectedDate!)}',
-                style: theme.primaryTextTheme.subtitle1,
-              ),
+            Text(
+              '${DateFormat.yMMM(locale).format(selectedDate!)}',
+              style: theme.primaryTextTheme.subtitle1,
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,21 +276,10 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
     );
   }
 
-  // void _onSelectYear() => setState(() => _selector = new YearSelector(
-  //   key: _halfSelectorState,
-  //   initialDate: selectedDate!,
-  //   firstDate: _firstDate,
-  //   lastDate: _lastDate,
-  //   onYearSelected: _onYearSelected,
-  //   upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
-  //   upDownButtonEnableStatePublishSubject:
-  //   _upDownButtonEnableStatePublishSubject!,
-  // ));
-
-  void _onHalfSelected(final DateTime date) => setState(() {
+  void _onWeekSelected(final DateTime date) => setState(() {
         selectedDate = date;
-        _selector = new HalfSelector(
-          key: _halfSelectorState,
+        _selector = new WeekSelector(
+          key: _weekSelectorState,
           openDate: selectedDate!,
           selectedDate: selectedDate!,
           upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
@@ -292,24 +287,16 @@ class _HalfPickerDialogState extends State<_HalfPickerDialog> {
               _upDownButtonEnableStatePublishSubject!,
           firstDate: _firstDate,
           lastDate: _lastDate,
-          onHalfSelected: _onHalfSelected,
+          onWeekSelected: _onWeekSelected,
           locale: widget.locale,
         );
       });
 
   void _onUpButtonPressed() {
-    if (_halfSelectorState.currentState != null) {
-      _halfSelectorState.currentState!.goUp();
+    if (_weekSelectorState.currentState != null) {
+      _weekSelectorState.currentState!.goUp();
     } else {
-      _monthSelectorState.currentState!.goUp();
-    }
-  }
-
-  void _onDownButtonPressed() {
-    if (_halfSelectorState.currentState != null) {
-      _halfSelectorState.currentState!.goDown();
-    } else {
-      _monthSelectorState.currentState!.goDown();
+      _weekSelectorState.currentState!.goUp();
     }
   }
 }

@@ -70,7 +70,8 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
   @override
   void initState() {
     super.initState();
-    selectedDate = DateTime(widget.initialDate!.year, widget.initialDate!.month);
+    selectedDate =
+        DateTime(widget.initialDate!.year, widget.initialDate!.month);
     if (widget.firstDate != null)
       _firstDate = DateTime(widget.firstDate!.year, widget.firstDate!.month);
     if (widget.lastDate != null)
@@ -143,11 +144,11 @@ class _MonthPickerDialogState extends State<_MonthPickerDialog> {
   ) {
     return ButtonBar(
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, null),
           child: Text(widget.localizations.cancelButtonLabel),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, selectedDate),
           child: Text(widget.localizations.okButtonLabel),
         )

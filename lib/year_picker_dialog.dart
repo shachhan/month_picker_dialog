@@ -62,7 +62,7 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
 
   PublishSubject<UpDownPageLimit>? _upDownPageLimitPublishSubject;
   PublishSubject<UpDownButtonEnableState>?
-  _upDownButtonEnableStatePublishSubject;
+      _upDownButtonEnableStatePublishSubject;
 
   Widget? _selector;
   DateTime? selectedDate, _firstDate, _lastDate;
@@ -70,7 +70,8 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
   @override
   void initState() {
     super.initState();
-    selectedDate = DateTime(widget.initialDate!.year, widget.initialDate!.month);
+    selectedDate =
+        DateTime(widget.initialDate!.year, widget.initialDate!.month);
     if (widget.firstDate != null)
       _firstDate = DateTime(widget.firstDate!.year, widget.firstDate!.month);
     if (widget.lastDate != null)
@@ -85,7 +86,7 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
       selectedDate: selectedDate!,
       upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
       upDownButtonEnableStatePublishSubject:
-      _upDownButtonEnableStatePublishSubject!,
+          _upDownButtonEnableStatePublishSubject!,
       firstDate: _firstDate,
       lastDate: _lastDate,
       onYearSelected: _onYearSelected1,
@@ -114,7 +115,7 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
     );
     return Theme(
       data:
-      Theme.of(context).copyWith(dialogBackgroundColor: Colors.transparent),
+          Theme.of(context).copyWith(dialogBackgroundColor: Colors.transparent),
       child: Dialog(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -141,15 +142,15 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
   }
 
   Widget buildButtonBar(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     return ButtonBar(
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, null),
           child: Text(widget.localizations.cancelButtonLabel),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context, selectedDate),
           child: Text(widget.localizations.okButtonLabel),
         )
@@ -295,20 +296,20 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
   //     ));
 
   void _onYearSelected1(final DateTime date) => setState(() {
-    selectedDate = date;
-    _selector = new YearSelector1(
-      key: _yearSelectorState,
-      openDate: selectedDate!,
-      selectedDate: selectedDate!,
-      upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
-      upDownButtonEnableStatePublishSubject:
-      _upDownButtonEnableStatePublishSubject!,
-      firstDate: _firstDate,
-      lastDate: _lastDate,
-      onYearSelected: _onYearSelected1,
-      locale: widget.locale,
-    );
-  });
+        selectedDate = date;
+        _selector = new YearSelector1(
+          key: _yearSelectorState,
+          openDate: selectedDate!,
+          selectedDate: selectedDate!,
+          upDownPageLimitPublishSubject: _upDownPageLimitPublishSubject!,
+          upDownButtonEnableStatePublishSubject:
+              _upDownButtonEnableStatePublishSubject!,
+          firstDate: _firstDate,
+          lastDate: _lastDate,
+          onYearSelected: _onYearSelected1,
+          locale: widget.locale,
+        );
+      });
 
   void _onUpButtonPressed() {
     if (_yearSelectorState.currentState != null) {
