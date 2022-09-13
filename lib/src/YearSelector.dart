@@ -68,7 +68,7 @@ class YearSelectorState extends State<YearSelector> {
             ? Theme.of(context).colorScheme.secondary
             : null,
         foregroundColor: year == widget.initialDate!.year
-            ? Theme.of(context).colorScheme.primary
+            ? Theme.of(context).colorScheme.onPrimary
             : year == DateTime.now().year
                 ? Theme.of(context).colorScheme.secondary
                 : null,

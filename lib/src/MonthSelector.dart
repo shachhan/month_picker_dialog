@@ -76,7 +76,7 @@ class MonthSelectorState extends State<MonthSelector> {
             : null,
         foregroundColor: date.month == widget.selectedDate!.month &&
                 date.year == widget.selectedDate!.year
-            ? Theme.of(context).colorScheme.primary
+            ? Theme.of(context).colorScheme.onPrimary
             : date.month == DateTime.now().month &&
                     date.year == DateTime.now().year
                 ? Theme.of(context).colorScheme.secondary
